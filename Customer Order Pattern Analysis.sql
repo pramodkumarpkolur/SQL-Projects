@@ -25,12 +25,12 @@ values
 select * from dspro.swiggy;
 
 
-#Q1: find the count of duplicate rows in the swiggy table.----------------->
+#Q1: 'Find the count of duplicate rows in the swiggy table'.----------------->
 
 select id, count(id) from dspro.swiggy group by id having count(id)>1; 
 
 
-#Q2: Remove duplicate records from the table.------------------->
+#Q2: 'Remove duplicate records from the table'.------------------->
 
 create temporary table dspro.abc
  as (select distinct id, cust_id, order_id, partner_code, outlet,
@@ -43,11 +43,11 @@ select * from dspro.swiggy;
 
 
 
-#Q3:Print records from row number 4 to 9.----------------------->
+#Q3:'Print records from row number 4 to 9'.----------------------->
  select * from dspro.swiggy limit 3,6; 
  
 
-#Q4:Find the latest order placed by customers.Refer to the output. --------------------->
+#Q4:'Find the latest order placed by customers.Refer to the output'. --------------------->
  # (customer id- wise latest orders)
 
 with abcd
@@ -55,8 +55,8 @@ as (select cust_id, outlet, order_date, rank() over (partition by cust_id order 
  as rank1 from dspro.swiggy) select * from abcd where rank1 < 2;
 
 
-#5Q:: Print order_id, partner_code, order_date, comment (No issues in place of null else ------------------>
-#comment).
+#5Q:'Print order_id, partner_code, order_date, comment (No issues in place of null else ------------------>
+#comment)'.
 
 create temporary table dspro.ab as (select order_id, partner_code, order_date, comments from dspro.swiggy);
 select * from dspro.ab;
@@ -67,8 +67,8 @@ set comments ="No issues" where comments ="  " ;
 select * from dspro.ab;
 
 
-#6: : Print outlet wise order count, cumulative order count, total bill_amount, cumulative 
-# bill_amount. Refer to the output below  ---------------------------------->
+#6: 'Print outlet wise order count, cumulative order count, total bill_amount, cumulative 
+# bill_amount. Refer to the output below'  ---------------------------------->
 
 select * from dspro.swiggy;     #For my reference.
 
@@ -82,7 +82,7 @@ join
 
 
 
-#7: Print cust_id wise, Outlet wise 'total number of orders'.-----------------------> 
+#7: 'Print cust_id wise, Outlet wise total number of orders'.-----------------------> 
 
 select * from dspro.swiggy;        #For my reference
 
@@ -94,26 +94,15 @@ cust_id
 from dspro.swiggy group by cust_id;
 
 
-#8: Print cust_id wise, Outlet wise 'total sales.-------------------->
+#8: 'Print cust_id wise, Outlet wise total sales'.-------------------->
 
-select
-cust_id
-,sum(case when outlet="KFC" then bill_amount end) as KFC
-,sum(case when outlet="Dominos" then bill_amount end) as Dominos
-,sum(case when outlet="Pizza hut" then bill_amount end) as Pizza_hut
-from dspro.swiggy group by cust_id;
+select cust_id,
+ sum(case when outlet="KFC" then bill_amount end) as KFC,
+ sum(case when outlet="Pizza hut" then bill_amount end) as Pizza_hut,
+ sum(case when outlet="Dominos" then bill_amount end) as Dominos 
+ from honey.swiggy group by 1;
 
 #_______________________________________________END__________________________________________________
 
 
 
-set sql_safe_updates=0;
-update dspro.swiggy 
-set bill_amount="0" where bill_amount is null;
-
-set sql_safe_updates=0;
-update dspro.swiggy 
-set outlet="0" where outlet is null;
-
-
-select * from dspro.swiggy; 
