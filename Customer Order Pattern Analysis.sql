@@ -1,4 +1,4 @@
-# SQL Project on "Food Ordering App"
+# SQL Project on "Food Ordering App" or "Customer Order Pattern Analysis"
 
 create table dspro.swiggy
 (id int, cust_id varchar (20), order_id int, partner_code int, outlet varchar (20), bill_amount int,
